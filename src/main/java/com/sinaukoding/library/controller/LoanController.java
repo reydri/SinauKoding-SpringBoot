@@ -6,6 +6,7 @@ import com.sinaukoding.library.common.RestResult;
 import com.sinaukoding.library.common.StatusCode;
 import com.sinaukoding.library.entity.Loan;
 import com.sinaukoding.library.service.LoanService;
+import com.sinaukoding.library.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,26 @@ public class LoanController extends BaseController {
                           @RequestParam(value = "offset") int offset,
                           @RequestParam(value = "limit") int limit) throws JsonProcessingException {
 
-        Loan loan = param != null ? new ObjectMapper().readValue(param, Loan.class) : null;
+        Loan loan = param != null ? new ObjectMapper().readValue(param, Loan.class) : new Loan();
 
         long rows = service.count(loan);
 
         return new RestResult(rows > 0 ? service.find(loan, offset, limit) : new ArrayList<>(), rows);
+    }
+
+    @GetMapping(value = "by-date")
+    public RestResult findByDate(@RequestParam(value = "param", required = false) String param,
+                                 @RequestParam(value = "start-date") String startDate,
+                                 @RequestParam(value = "end-date") String endDate) throws JsonProcessingException {
+
+        RestResult result = new RestResult(StatusCode.OPERATION_FAILED);
+
+        Loan loan = param != null ? new ObjectMapper().readValue(param, Loan.class) : new Loan();
+
+        result.setData(service.findByDate(loan, DateUtils.fromString(startDate), DateUtils.fromString(endDate)));
+        result.setRows((long) service.findByDate(loan, DateUtils.fromString(startDate), DateUtils.fromString(endDate)).size());
+
+        return result;
     }
 
     @PostMapping
