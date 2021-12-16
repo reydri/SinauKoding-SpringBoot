@@ -61,7 +61,7 @@ public abstract class BaseDAO<T extends BaseEntity<T>> {
 
         query.select(builder.count(root));
 
-        return singleResult(query, predicates(param, builder, root, false));
+        return singleResult(query, predicates(param, builder, root, true));
     }
 
     public T save(T entity){

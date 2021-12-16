@@ -25,7 +25,7 @@ public class LoanController extends BaseController {
                           @RequestParam(value = "offset") int offset,
                           @RequestParam(value = "limit") int limit) throws JsonProcessingException {
 
-        Loan loan = param != null ? new ObjectMapper().readValue(param, Loan.class) : new Loan();
+        Loan loan = param != null ? new ObjectMapper().readValue(param, Loan.class) : null;
 
         long rows = service.count(loan);
 
