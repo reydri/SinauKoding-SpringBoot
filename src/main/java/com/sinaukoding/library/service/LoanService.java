@@ -1,5 +1,6 @@
 package com.sinaukoding.library.service;
 
+import com.sinaukoding.library.LibraryApplication;
 import com.sinaukoding.library.dao.BaseDAO;
 import com.sinaukoding.library.dao.LoanDAO;
 import com.sinaukoding.library.entity.Loan;
@@ -25,6 +26,7 @@ public class LoanService extends BaseService<Loan> {
     @Transactional
     public Loan save(Loan entity){
         entity.setLoanDate(new Date());
+        entity.setUser(LibraryApplication.getCurrentUser());
 
         return dao.save(entity);
     }
